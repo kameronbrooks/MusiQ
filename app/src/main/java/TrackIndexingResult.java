@@ -1,5 +1,6 @@
 import android.media.MediaPlayer;
 
+import java.util.Collection;
 import java.util.LinkedList;
 
 public class TrackIndexingResult {
@@ -11,10 +12,17 @@ public class TrackIndexingResult {
         _newItemCount = 0;
     }
 
+    TrackIndexingResult(Collection<TrackInfo> collection) {
+        _newIndexedItems = new LinkedList<TrackInfo>();
+        _newIndexedItems.addAll(collection);
+        _newItemCount = _newIndexedItems.size();
+    }
+
     public void AddItem(TrackInfo track) {
         _newIndexedItems.add(track);
         _newItemCount++;
     }
+
     public static TrackIndexingResult concat(TrackIndexingResult a, TrackIndexingResult b) {
         TrackIndexingResult output = new TrackIndexingResult();
         // Add all elements from both
