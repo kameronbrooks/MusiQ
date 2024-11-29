@@ -1,3 +1,5 @@
+package com.g2.musiq;
+
 public class TrackIndexer {
     public TrackIndexingResult indexFileSystem() {
         // TODO

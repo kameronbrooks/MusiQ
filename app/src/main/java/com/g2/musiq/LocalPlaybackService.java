@@ -1,3 +1,5 @@
+package com.g2.musiq;
+
 import android.media.MediaPlayer;
 
 public class LocalPlaybackService implements IStreamingService {

@@ -1,3 +1,5 @@
+package com.g2.musiq;
+
 import android.media.Image;
 
 public class TrackInfo {

@@ -1,4 +1,4 @@
-import android.media.MediaPlayer;
+package com.g2.musiq;
 
 import java.util.Collection;
 import java.util.LinkedList;
