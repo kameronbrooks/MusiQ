@@ -9,8 +9,8 @@ public class TrackInfo {
     public String mediaSourceType;
     public String trackName;
     public float trackLengthSeconds;
-    // public Artist artist;
-    // public Album album;
+    public Artist artist;
+    public Album album;
     public String genre;
     public int trackNumber;
     public Image image;
