@@ -67,7 +67,11 @@ public class MainActivity extends AppCompatActivity {
 
         Player.createInstance();
 
-
+        //Genre genre = new Genre();
+        //genre.name = "Unknown";
+        //genre.description = "The default Genre if it is unknown";
+        //genre.embedding = new float[512];
+        //lib.addGenre(genre);
 
     }
 

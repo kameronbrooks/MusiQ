@@ -5,7 +5,7 @@ import android.media.Image;
 import java.util.Date;
 
 public class Artist {
-    public int id;
+    public long id;
     public String name;
     public String description;
     public Image image;

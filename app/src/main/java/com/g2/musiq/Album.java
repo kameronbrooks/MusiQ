@@ -5,7 +5,7 @@ import android.media.Image;
 import java.util.Date;
 
 public class Album {
-    public int id;
+    public long id;
     public String name;
     public Date releaseDate;
     public String description;

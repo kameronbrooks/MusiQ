@@ -1,9 +1,11 @@
 package com.g2.musiq;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -180,7 +182,16 @@ public class MusicLibrary {
 
     }
 
+    public void addGenre(Genre genre) {
+        ContentValues values = new ContentValues();
+        values.put("name", genre.name);
+        values.put("description", genre.description);
+        values.put("embedding", convertFloatArrayToBlob(genre.embedding));
 
+        long newId = db.insert("genres", null, values);
+        Log.d("Musiq", "Genre added " + newId);
+
+    }
 
     public QueryResults textQuery(String search, int maxCount) {
         QueryResults results = new QueryResults();
@@ -204,7 +215,17 @@ public class MusicLibrary {
         return null;
     }
 
-    public String[] getGenres() {
+    public Genre[] getGenres() {
+        // TODO
+        return null;
+    }
+
+    public Artist[] getArtists() {
+        // TODO
+        return null;
+    }
+
+    public Album[] getAlbums() {
         // TODO
         return null;
     }

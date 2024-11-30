@@ -2,6 +2,7 @@ package com.g2.musiq;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -11,7 +12,7 @@ import java.io.InputStreamReader;
 
 public class DatabaseInterface extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "musiq_lib.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private Context context;
 
@@ -22,7 +23,7 @@ public class DatabaseInterface extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        loadSQLFile(db, R.raw.sqlite_table);
+        loadSQLFile(db, R.raw.create_db);
     }
 
     private void loadSQLFile(SQLiteDatabase db, int resourceId) {
@@ -38,6 +39,7 @@ public class DatabaseInterface extends SQLiteOpenHelper {
             while ((line = reader.readLine()) != null) {
                 sql.append(line);
                 if (line.trim().endsWith(";")) { // Execute each statement when a semicolon is encountered
+                    Log.d("Musiq", "Executing SQL: "+sql.toString());
                     db.execSQL(sql.toString());
                     sql.setLength(0); // Clear the StringBuilder
                 }
