@@ -56,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
             AppSettings.SaveAppSettings(this, settings);
         }
 
+        MusicLibrary lib = MusicLibrary.createInstance(this);
+
+        Log.d("Database Path", this.getDatabasePath("musiq_lib.db").getAbsolutePath());
+
         TrackIndexer indexer = new TrackIndexer();
         indexer.indexFileSystem(this);
 

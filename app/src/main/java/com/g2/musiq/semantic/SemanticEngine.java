@@ -5,7 +5,7 @@ import android.content.Context;
 import java.io.IOException;
 
 public class SemanticEngine {
-
+    private static SemanticEngine _instance;
     public SemanticEngine(Context context) {
         try {
             LiteRTModelLoader loader = new LiteRTModelLoader(context, "models/openl3_model.tflite");
@@ -14,4 +14,5 @@ public class SemanticEngine {
             e.printStackTrace();
         }
     }
+
 }
