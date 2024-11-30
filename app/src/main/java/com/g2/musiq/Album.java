@@ -10,6 +10,7 @@ public class Album {
     public Date releaseDate;
     public String description;
     public Image image;
+    public String imageLocator;
     public TrackInfo[] tracks;
 
     public Artist artist;

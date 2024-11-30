@@ -1,6 +1,7 @@
 package com.g2.musiq;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.Manifest;
 import com.google.android.material.snackbar.Snackbar;
@@ -56,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
             AppSettings.SaveAppSettings(this, settings);
         }
 
-        MusicLibrary lib = MusicLibrary.createInstance(this);
+        MusicLibrary lib = MusicLibrary.createInstance(this.getApplicationContext());
+
 
         Log.d("Database Path", this.getDatabasePath("musiq_lib.db").getAbsolutePath());
 

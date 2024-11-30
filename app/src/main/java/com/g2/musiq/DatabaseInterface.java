@@ -17,11 +17,12 @@ public class DatabaseInterface extends SQLiteOpenHelper {
 
     public DatabaseInterface(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        loadSQLFile(db, R.raw.sqlite_table);
     }
 
     private void loadSQLFile(SQLiteDatabase db, int resourceId) {

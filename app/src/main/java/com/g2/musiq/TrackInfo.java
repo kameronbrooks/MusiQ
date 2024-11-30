@@ -11,9 +11,10 @@ public class TrackInfo {
     public float trackLengthSeconds;
     public Artist artist;
     public Album album;
-    public String genre;
+    public int genreId;
     public int trackNumber;
     public Image image;
     public String lyrics;
     public float[] embedding;
+    public int userRating;
 }
