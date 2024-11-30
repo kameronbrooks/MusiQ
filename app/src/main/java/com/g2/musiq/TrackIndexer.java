@@ -22,9 +22,12 @@ public class TrackIndexer {
     HashMap<String, Artist> _artistMap;
     HashMap<String, Album> _albumMap;
 
+    HashMap<String, Genre> _genreMap;
+
     public TrackIndexer() {
         _artistMap = new HashMap<String,Artist>();
         _albumMap = new HashMap<String, Album>();
+        _genreMap = new HashMap<String, Genre>();
     }
 
     public static File getMusicDirectory() {
@@ -81,7 +84,7 @@ public class TrackIndexer {
                 MediaStore.Audio.Media.RELATIVE_PATH,
                 MediaStore.Audio.Media.ALBUM,
                 MediaStore.Audio.Media.ARTIST,
-                MediaStore.Audio.Media.TRACK
+                MediaStore.Audio.Media.TRACK,
         };
 
         Cursor cursor = resolver.query(audioURI, projection, null, null, null);
@@ -138,6 +141,8 @@ public class TrackIndexer {
 
             info.album = album;
             info.artist = artist;
+
+            info.genreId = 1;
 
             indexingResult.AddItem(info);
 

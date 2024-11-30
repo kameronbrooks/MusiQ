@@ -11,6 +11,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MusicLibrary {
     protected static MusicLibrary _instance;
@@ -67,25 +69,35 @@ public class MusicLibrary {
         return builder.toString();
     }
 
-    private String generateInsertTrackSQL(TrackInfo trackInfo) {
-        String template = loadSQLFromResource(R.raw.insert_track);
-
-        String sql = template
-                .replace("{{song_id}}", String.valueOf(trackInfo.requestId))
-                .replace("{{media_locator}}", escapeString(trackInfo.mediaLocator))
-                .replace("{{media_type}}", escapeString(trackInfo.mediaSourceType))
-                .replace("{{name}}", escapeString(trackInfo.trackName))
-                .replace("{{length_seconds}}", String.valueOf(trackInfo.trackLengthSeconds))
-                .replace("{{artist_id}}", trackInfo.artist != null ? String.valueOf(trackInfo.artist.id) : "NULL")
-                .replace("{{album_id}}", trackInfo.album != null ? String.valueOf(trackInfo.album.id) : "NULL")
-                .replace("{{genre_id}}", String.valueOf(trackInfo.genreId))
-                .replace("{{embedding}}", byteArrayToHex(convertFloatArrayToBlob(trackInfo.embedding)))
-                .replace("{{track_number}}", String.valueOf(trackInfo.trackNumber))
-                .replace("{{lyrics}}", escapeString(trackInfo.lyrics))
-                .replace("{{user_rating}}", String.valueOf(trackInfo.userRating));
+    public long insertTrack(SQLiteDatabase db, TrackInfo trackInfo) {
 
 
-        return sql;
+        // Create a ContentValues object to hold the column values
+        ContentValues values = new ContentValues();
+        values.put("song_id", trackInfo.mediaId); // song_id
+        values.put("media_locator", trackInfo.mediaLocator); // media_locator
+        values.put("media_type", trackInfo.mediaSourceType); // media_type
+        values.put("name", trackInfo.trackName); // name
+        values.put("length_seconds", trackInfo.trackLengthSeconds); // length_seconds
+
+        // Nested objects
+        values.put("artist_id", trackInfo.artist != null ? trackInfo.artist.id : null); // artist_id
+        values.put("album_id", trackInfo.album != null ? trackInfo.album.id : null); // album_id
+
+        // Genre and other fields
+        values.put("genre_id", trackInfo.genreId); // genre_id
+        values.put("embedding", convertFloatArrayToBlob(trackInfo.embedding)); // embedding
+        values.put("track_number", trackInfo.trackNumber); // track_number
+        values.put("lyrics", trackInfo.lyrics); // lyrics
+        values.put("user_rating", trackInfo.userRating); // user_rating
+        values.put("uid", trackInfo.userRating);
+
+        // Insert the values into the "songs" table
+        //long newRowId = db.insert("songs", null, values);
+        long newRowId = db.insertWithOnConflict("songs", null, values, SQLiteDatabase.CONFLICT_IGNORE);
+
+        // Return the row ID of the new record, or -1 if there was an error
+        return newRowId;
     }
 
     private TrackInfo readTrackInfoFromCursor(Cursor cursor) {
@@ -118,34 +130,38 @@ public class MusicLibrary {
         return track;
     }
 
-    private String generateInsertAlbumSQL(Album album) {
-        String template = loadSQLFromResource(R.raw.insert_album);
+    public long insertAlbum(SQLiteDatabase db, Album album) {
+        // Create a ContentValues object to hold the column values
+        ContentValues values = new ContentValues();
+        values.put("album_id", album.id); // album_id
+        values.put("artist_id", album.artist.id); // artist_id
+        values.put("description", album.description); // description
+        values.put("img_locator", album.imageLocator); // img_locator
+        values.put("name", album.name); // name
+        values.put("release_date", album.releaseDate.toString()); // release_date (ensure correct format)
 
-        String sql = template
-                .replace("{{album_id}}", String.valueOf(album.id))
-                .replace("{{artist_id}}", String.valueOf(album.artist.id))
-                .replace("{{description}}", escapeString(album.description))
-                .replace("{{img_locator}}", escapeString(album.imageLocator))
-                .replace("{{name}}", escapeString(album.name))
-                .replace("{{relase_date}}", album.releaseDate.toString());
+        // Insert the values into the "albums" table
+        long newRowId = db.insert("albums", null, values);
 
-
-        return sql;
+        // Return the row ID of the new record, or -1 if there was an error
+        return newRowId;
     }
 
-    private String generateInsertArtistSQL(Artist artist) {
-        String template = loadSQLFromResource(R.raw.insert_artlst);
+    public long insertArtist(SQLiteDatabase db, Artist artist) {
+        // Create a ContentValues object to hold the column values
+        ContentValues values = new ContentValues();
+        values.put("artist_id", artist.id); // artist_id
+        values.put("description", artist.description); // description
+        values.put("img_locator", artist.imageLocator); // img_locator
+        values.put("name", artist.name); // name
+        values.put("release_date", artist.startDate.toString()); // release_date (ensure correct format)
+        values.put("primary_genre", artist.primaryGenreId); // primary_genre
 
-        String sql = template
-                .replace("{{artist_id}}", String.valueOf(artist.id))
-                .replace("{{description}}", escapeString(artist.description))
-                .replace("{{img_locator}}", escapeString(artist.imageLocator))
-                .replace("{{name}}", escapeString(artist.name))
-                .replace("{{release_date}}", escapeString(artist.startDate.toString())) // Ensure date is formatted
-                .replace("{{primary_genre}}", String.valueOf(artist.primaryGenreId));
+        // Insert the values into the "artists" table
+        long newRowId = db.insert("artists", null, values);
 
-
-        return sql;
+        // Return the row ID of the new record, or -1 if there was an error
+        return newRowId;
     }
 
     private float[] convertBlobToFloatArray(byte[] blob) {
@@ -193,6 +209,7 @@ public class MusicLibrary {
 
     }
 
+
     public QueryResults textQuery(String search, int maxCount) {
         QueryResults results = new QueryResults();
 
@@ -230,6 +247,28 @@ public class MusicLibrary {
         return null;
     }
 
+    public TrackInfo[] getTracks() {
+        String template = loadSQLFromResource(R.raw.select_tracks);
+        String sql = template
+                .replace("{{where_clause}}", "")
+                .replace("{{limit}}", "10000")
+                .replace("{{order}}", "songs.name ASC");
+
+        // Execute the query
+        Cursor cursor = db.rawQuery(sql, null);
+        if(cursor == null) {
+            return new TrackInfo[0];
+        }
+
+        List<TrackInfo> list = new ArrayList<TrackInfo>();
+        while(cursor.moveToNext()) {
+            TrackInfo track = readTrackInfoFromCursor(cursor);
+            list.add(track);
+        }
+
+        return list.toArray(new TrackInfo[0]);
+    }
+
     public Playlist[] getPlaylists() {
         // TODO
         return null;
@@ -240,18 +279,50 @@ public class MusicLibrary {
     }
 
     public void addTrack(TrackInfo track) {
-        // TODO
+        insertTrack(db, track);
     }
     public void removeTrack(TrackInfo track) {
-        // TODO
+        db.delete("songs", "song_id=?", new String[]{String.valueOf(track.mediaId)} );
     }
 
     public void addPlaylist(Playlist playlist) {
-        // TODO
+        ContentValues values = new ContentValues();
+        values.put("name", playlist.name);
+        values.put("description", playlist.description);
+        values.put("created_date", playlist.createdDate.toString());
+        values.put("user_rating", playlist.userRating);
+
+        long playlistId = db.insert("playlists", null, values);
+
+        if (playlist.tracks.isEmpty()) {
+            return;
+        }
+
+        // Save the songs
+        for (int i = 0; i < playlist.tracks.size(); i++) {
+            ContentValues values2 = new ContentValues();
+            values2.put("playlist_id", playlistId);
+            values2.put("song_id", playlist.tracks.get(i).mediaId);
+            values2.put("playlist_index", i);
+
+            db.insertWithOnConflict("playlist_songs", null, values2, SQLiteDatabase.CONFLICT_IGNORE);
+        }
+
     }
 
     public void updatePlaylist(Playlist playlist) {
-        // TODO
+        // Delete the existing mappings
+        db.delete("playlist_songs", "playlist_id=?", new String[]{String.valueOf(playlist.id)});
+
+        // Save the new ones
+        for (int i = 0; i < playlist.tracks.size(); i++) {
+            ContentValues values2 = new ContentValues();
+            values2.put("playlist_id", playlist.id);
+            values2.put("song_id", playlist.tracks.get(i).mediaId);
+            values2.put("playlist_index", i);
+
+            db.insertWithOnConflict("playlist_songs", null, values2, SQLiteDatabase.CONFLICT_IGNORE);
+        }
     }
 
 

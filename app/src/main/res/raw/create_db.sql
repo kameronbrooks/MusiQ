@@ -4,7 +4,7 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE genres (
   genre_id INTEGER PRIMARY KEY NOT NULL,
   description TEXT,
-  name TEXT,
+  name TEXT UNIQUE,
   embedding BLOB
 );
 
@@ -40,6 +40,7 @@ CREATE TABLE songs (
   artist_id INTEGER NOT NULL,
   album_id INTEGER NOT NULL,
   genre_id INTEGER NOT NULL,
+  uid TEXT UNIQUE,
   embedding BLOB,
   track_number INTEGER,
   lyrics TEXT,
@@ -63,7 +64,7 @@ CREATE TABLE song_interactions (
 CREATE TABLE playlists (
   playlist_id INTEGER PRIMARY KEY NOT NULL,
   description TEXT,
-  name TEXT NOT NULL,
+  name TEXT UNIQUE NOT NULL,
   created_date DATETIME NOT NULL,
   user_rating INTEGER NOT NULL
 );

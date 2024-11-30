@@ -63,15 +63,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Database Path", this.getDatabasePath("musiq_lib.db").getAbsolutePath());
 
         TrackIndexer indexer = new TrackIndexer();
-        indexer.indexFileSystem(this);
-
+        TrackIndexingResult result = indexer.indexFileSystem(this);
+        Log.d("Musiq", "Indexing Complete: " + result.getTracks().length);
         Player.createInstance();
 
-        //Genre genre = new Genre();
-        //genre.name = "Unknown";
-        //genre.description = "The default Genre if it is unknown";
-        //genre.embedding = new float[512];
-        //lib.addGenre(genre);
+
 
     }
 

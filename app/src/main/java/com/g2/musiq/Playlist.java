@@ -11,5 +11,6 @@ public class Playlist {
     public List<TrackInfo> tracks;
     public boolean isDynamic;
 
+    public int userRating;
     public static Playlist current;
 }

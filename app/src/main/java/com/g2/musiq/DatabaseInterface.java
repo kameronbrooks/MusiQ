@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 
 public class DatabaseInterface extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "musiq_lib.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private Context context;
 
@@ -48,18 +48,24 @@ public class DatabaseInterface extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //Genre genre = new Genre();
+        //genre.name = "Unknown";
+        //genre.description = "The default Genre if it is unknown";
+        //genre.embedding = new float[512];
+        //lib.addGenre(genre);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Handle database upgrade logic
-        db.execSQL("DROP TABLE IF EXISTS Genres");
-        db.execSQL("DROP TABLE IF EXISTS Artists");
-        db.execSQL("DROP TABLE IF EXISTS Albums");
-        db.execSQL("DROP TABLE IF EXISTS Songs");
-        db.execSQL("DROP TABLE IF EXISTS SongInteractions");
-        db.execSQL("DROP TABLE IF EXISTS Playlists");
-        db.execSQL("DROP TABLE IF EXISTS PlaylistSongs");
+        db.execSQL("DROP TABLE IF EXISTS genres");
+        db.execSQL("DROP TABLE IF EXISTS artists");
+        db.execSQL("DROP TABLE IF EXISTS albums");
+        db.execSQL("DROP TABLE IF EXISTS songs");
+        db.execSQL("DROP TABLE IF EXISTS song_interactions");
+        db.execSQL("DROP TABLE IF EXISTS playlists");
+        db.execSQL("DROP TABLE IF EXISTS playlist_songs");
         onCreate(db);
     }
 }

@@ -17,4 +17,13 @@ public class TrackInfo {
     public String lyrics;
     public float[] embedding;
     public int userRating;
+
+    // Used to efficiently check for database conflicts
+    public String getUID() {
+        String ar = (artist != null) ? artist.name : "";
+        String al = (album != null) ? album.name : "";
+
+        return ar + "." + al + "." + trackName;
+
+    }
 }
