@@ -1,4 +1,4 @@
-package semantic;
+package com.g2.musiq.semantic;
 
 import java.util.ArrayList;
 

@@ -138,7 +138,6 @@ public class TrackIndexer {
 
             info.album = album;
             info.artist = artist;
-            //Log.d("TrackIndexer", "-> " + info.trackName + " | " + info.trackNumber + " | " + album + " | " + artist);
 
             indexingResult.AddItem(info);
 

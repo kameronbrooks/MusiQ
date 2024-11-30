@@ -1,4 +1,4 @@
-package semantic;
+package com.g2.musiq.semantic;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;

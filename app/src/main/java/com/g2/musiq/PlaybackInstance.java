@@ -17,6 +17,10 @@ public class PlaybackInstance {
         this.isPlaying = false;
     }
 
+    public void setOnCompletionListener(MediaPlayer.OnCompletionListener listener) {
+        this.player.setOnCompletionListener(listener);
+    }
+
     //Methods
     //Start playback
     public void play() {

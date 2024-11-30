@@ -1,10 +1,8 @@
-package semantic;
+package com.g2.musiq.semantic;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 public class SemanticEngine {
 
